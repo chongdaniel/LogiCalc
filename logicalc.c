@@ -10,6 +10,7 @@
 
 int g_solve_count = 0;
 
+
 bool solve(proposition *left, proposition *right, operation function) {
 
   //printf("in function NOTC: %d\n", right->o);
