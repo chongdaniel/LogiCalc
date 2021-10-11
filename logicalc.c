@@ -2,7 +2,10 @@
  * Daniel Chong and Benson Tsai
  * A proof-of-concept propositional logic calculator.
  */
- 
+/*
+ * peepee poopoo
+ */
+
 #include "logicalc.h"
 
 #include <stdio.h>
