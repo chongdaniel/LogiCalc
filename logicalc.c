@@ -10,25 +10,43 @@
 
 int g_solve_count = 0;
 
+proposition generate_prop(char *input, int input_length) {
+  int level = 0;
+  int str_lvl[input_length] = {}
+  for (int i = 0; i < input_length; i++) {
+    if (input[i] == '(') {
+      level++;
+    }
+    else if (input[i] == ')') {
+      level--;
+    }
+    str_lvl[i] = level;
+  }
 
-bool solve(proposition *left, proposition *right, operation function) {
+  return prop;
 
-  //printf("in function NOTC: %d\n", right->o);
+}
+
+bool solve(proposition *input) {
+  proposition *left = input->a;
+  proposition *right = input->b;
+  operation function = input->o;
+//  printf("in function NOTC: %d\n", right->o);
   if (left->o != END) {
-    //printf("left->a: %p\n", left->a);
-    //printf("Pre-Left value: %d\n", left->value);
-    //printf("Pre-Left operator: %d\n", left->o);
+//    printf("left->a: %p\n", left->a);
+//    printf("Pre-Left value: %d\n", left->value);
+//    printf("Pre-Left operator: %d\n", left->o);
 
-    left->value = solve((left->a), (left->b), left->o);
-    //printf("Left value: %d\n", left->value);
+    left->value = solve(left);
+//    printf("Left value: %d\n", left->value);
   }
   if (right->o != END) {
-    //printf("right->a: %p\n", right->a);
-    //printf("Pre-Right value: %d\n", right->value);
-    //printf("Pre-Right operator: %d\n", right->o);
-    right->value = solve((right->a), (right->b), right->o);
-    //printf("Post-Right operator: %d\n", right->o);
-    //printf("Right value: %d\n", right->value);
+//    printf("right->a: %p\n", right->a);
+//    printf("Pre-Right value: %d\n", right->value);
+//    printf("Pre-Right operator: %d\n", right->o);
+    right->value = solve(right);
+//    printf("Post-Right operator: %d\n", right->o);
+//    printf("Right value: %d\n", right->value);
   }
   switch (function) {
     case AND:
@@ -50,7 +68,8 @@ bool solve(proposition *left, proposition *right, operation function) {
     case IMPL: {
       proposition temp_first = {END, !left->value, NULL, NULL};
       proposition temp_second = {END, right->value, NULL, NULL};
-      return solve(&temp_first, &temp_second, OR);
+      proposition temp = {OR, NULL, &temp_first, &temp_second};
+      return solve(&temp);
     }
     case BICOND:
       if (left->value == right->value) {
@@ -85,13 +104,15 @@ int main() {
   //statement: (A && B) -> !C
   proposition A_and_B = {AND, NULL, &rec_testA, &rec_testB};
   proposition A_and_C = {AND, NULL, &rec_testA, &rec_testC};
+  proposition A_or_B = {OR, NULL, &rec_testA, &rec_testB};
   proposition R1 = {AND, NULL, &A_and_B, &A_and_C};
   proposition R2 = {AND, NULL, &A_and_C, &A_and_B};
   proposition C_and_D = {OR, NULL, &rec_testC, &rec_testD};
   proposition not_C_and_D = {NOT, NULL, &C_and_D, &C_and_D};
+  proposition not_C = {NOT, NULL, &rec_testC, &rec_testC};
 
+  proposition final = {IMPL, false, &A_and_B, &not_C};
 /*
-  //proposition final = {IMPL, false, &A_and_B, &not_C};
   for (int i = 0; i < 16; i++) {
     printf("A: %d, B: %d, C: %d, D: %d\ ",
       (&rec_testA)->value, (&rec_testB)->value, (&rec_testC)->value, (&rec_testD)->value);
@@ -107,16 +128,17 @@ int main() {
       (&rec_testA)->value = !(&rec_testA)->value;
     }
   }
+*/
   //XOR test
   for (int i = 0; i < 4; i++) {
     printf("A: %d, B: %d ", (&rec_testA)->value, (&rec_testB)->value);
-    printf("R: %d\n", solve(&rec_testA, &rec_testB, XOR));
+    printf("R: %d\n", solve(&final));
 
     (&rec_testB)->value = !(&rec_testB)->value;
     if ((i + 1) % 2 == 0) {
-      (&rec_testA)->value = !(&rec_testA)->value;
+      (&rec_testA)->value = !((&rec_testA)->value);
     }
   }
-*/
+
   return OK;
 }

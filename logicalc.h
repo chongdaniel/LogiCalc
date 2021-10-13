@@ -33,7 +33,7 @@ typedef struct {
 
 /* prototype */
 
-bool solve(proposition *, proposition *, operation);
+bool solve(proposition *);
 
 
 
