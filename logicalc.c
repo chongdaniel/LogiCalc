@@ -7,22 +7,37 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 int g_solve_count = 0;
 
+proposition generate_tree(char *input, int *str_lvl, int level) {
+  for (int i = 0; i < strlen(input); i++) {
+    
+  }
+}
+
+
+
+
 proposition generate_prop(char *input, int input_length) {
+  proposition prop = {END, NULL, NULL, NULL};
   int level = 0;
-  int str_lvl[input_length] = {}
+  int str_lvl[50] = {};
   for (int i = 0; i < input_length; i++) {
     if (input[i] == '(') {
       level++;
     }
-    else if (input[i] == ')') {
+    str_lvl[i] = level;
+    if (input[i] == ')') {
       level--;
     }
-    str_lvl[i] = level;
   }
-
+  for (int i = 0; i < input_length; i++) {
+    printf("%d", str_lvl[i]);
+  }
+  printf("\n");
+//  generate_tree(input, str_lvl, 1);
   return prop;
 
 }
@@ -112,6 +127,14 @@ int main() {
   proposition not_C = {NOT, NULL, &rec_testC, &rec_testC};
 
   proposition final = {IMPL, false, &A_and_B, &not_C};
+
+  char test_string[50] = {"(((A OR B) IMPL (NOT C)) AND D)"};
+  for (int i = 0; i < 31; i++) {
+    printf("%c",test_string[i]);
+  }
+  printf("\n");
+  proposition boo = generate_prop(test_string, strlen(test_string));
+  printf("%d\n", strlen(test_string));
 /*
   for (int i = 0; i < 16; i++) {
     printf("A: %d, B: %d, C: %d, D: %d\ ",
@@ -130,6 +153,7 @@ int main() {
   }
 */
   //XOR test
+/*
   for (int i = 0; i < 4; i++) {
     printf("A: %d, B: %d ", (&rec_testA)->value, (&rec_testB)->value);
     printf("R: %d\n", solve(&final));
@@ -139,6 +163,6 @@ int main() {
       (&rec_testA)->value = !((&rec_testA)->value);
     }
   }
-
+*/
   return OK;
 }
