@@ -10,16 +10,89 @@
 #include <string.h>
 
 int g_solve_count = 0;
-
-proposition generate_tree(char *input, int *str_lvl, int level) {
-  for (int i = 0; i < strlen(input); i++) {
-    
-  }
+/*
+char *replace_o(char *input) {
+  int i = 1;
+  while (i < NUM_OPS) {
+    bool condition = true;
+    while (condition) {
+      char *index = NULL;
+      switch (i) {
+        case 1: {
+          index = strstr(input, "AND");
+          if (index != NULL) {
+            &index = '1';
+            &(index + 1) = ' ';
+            &(index + 2) = ' ';
+          }
+          else {
+            condition = false;
+            break;
+          }
+        }
+        case 2: {
+          index = strstr(input, "OR");
+          if (index != NULL) {
+            &index = '2';
+            &(index + 1) = ' ';
+          }
+          else {
+            condition = false;
+            break;
+          }
+        }
+        case 3: {
+          index = strstr(input, "XOR");
+          if (index != NULL) {
+            &index = '3';
+            &(index + 1) = ' ';
+            &(index + 2) = ' ';
+          }
+          else {
+            condition = false;
+            break;
+          }
+        }
+        case 4: {
+        }
+        case 5: {
+        }
+        case 6: {
+        }
+        case 7: {
+        }
 }
+*/
+/*
+proposition generate_tree(char *input, int *str_lvl, int level) {
+  proposition prop = {};
+  int counter = 0;
+  char new_string[MAX_STRING_LEN] = {'\0'};
 
+  for (int i = 0; i < strlen(input); i++) {
+    if (str_lvl[i] == level) {
+      new_string[i] = input[i];
+    }
+  }
+  // do some string splitting magic
+  for (int i = 0, i < strlen(input); i++) {
+    if (strstr(new_string, "BICOND") != NULL) {
 
+    }
+  }
 
+  // if (no proposition found)
+  //  return prop = {END, FALSE, NULL, NULL};
+  // if (proposition found)
+  //  split input and str_lvl into left_string and right_string by operator
+  //  prop.a = generate_tree(left_string, split_str_lvl, level + 1);
+  //  prop.b = generate_tree(right_string, split_str_lvl, level + 1);
+  //  prop.o = identified_operation;
+  //  prop.value = false;
+  return prop;
 
+}
+*/
 proposition generate_prop(char *input, int input_length) {
   proposition prop = {END, NULL, NULL, NULL};
   int level = 0;
@@ -100,6 +173,9 @@ bool solve(proposition *input) {
   return true;
 }
 
+int find_variables(proposition prop) {
+  
+}
 
 int main() {
   proposition capital_a = {END, true, NULL, NULL};
@@ -132,9 +208,17 @@ int main() {
   for (int i = 0; i < 31; i++) {
     printf("%c",test_string[i]);
   }
+  char test_string2[52] = {""};
+  test_string2[0] = '(';
+  strcpy(&test_string2[1], test_string);
+  test_string2[strlen(test_string2)] = ')';
   printf("\n");
-  proposition boo = generate_prop(test_string, strlen(test_string));
+//  proposition boo = generate_prop(test_string, strlen(test_string));
   printf("%d\n", strlen(test_string));
+  for (int i = 0; i < 33; i++) {
+    printf("%c",test_string2[i]);
+  }
+  printf("\n");
 /*
   for (int i = 0; i < 16; i++) {
     printf("A: %d, B: %d, C: %d, D: %d\ ",

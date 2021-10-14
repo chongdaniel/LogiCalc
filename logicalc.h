@@ -4,7 +4,9 @@
 #include <stdbool.h>
 
 /* Constant definitions */
-  
+#define MAX_STRING_LEN (50)
+#define NUM_OPS        (8)
+
 /* Error codes */
 #define OK             (-1)
 #define BAD_INPUT      (-2)
