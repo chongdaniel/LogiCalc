@@ -5,7 +5,7 @@
 
 /* Constant definitions */
 #define MAX_STRING_LEN (50)
-#define NUM_OPS        (8)
+#define NUM_OPS        (7)
 
 /* Error codes */
 #define OK             (-1)
@@ -17,10 +17,9 @@ typedef enum {
   AND = 1,
   OR = 2,
   XOR = 3,
-  NOR = 4,
-  IMPL = 5,
-  BICOND = 6,
-  NOT = 7
+  IMPL = 4,
+  BICOND = 5,
+  NOT = 6
 } operation;
 
 

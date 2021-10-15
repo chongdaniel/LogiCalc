@@ -10,7 +10,7 @@
 #include <string.h>
 
 int g_solve_count = 0;
-/*
+
 char *replace_o(char *input) {
   int i = 1;
   while (i < NUM_OPS) {
@@ -21,9 +21,9 @@ char *replace_o(char *input) {
         case 1: {
           index = strstr(input, "AND");
           if (index != NULL) {
-            &index = '1';
-            &(index + 1) = ' ';
-            &(index + 2) = ' ';
+            *index = '1';
+            *(index + 1) = ' ';
+            *(index + 2) = ' ';
           }
           else {
             condition = false;
@@ -33,8 +33,8 @@ char *replace_o(char *input) {
         case 2: {
           index = strstr(input, "OR");
           if (index != NULL) {
-            &index = '2';
-            &(index + 1) = ' ';
+            *index = '2';
+            *(index + 1) = ' ';
           }
           else {
             condition = false;
@@ -44,9 +44,9 @@ char *replace_o(char *input) {
         case 3: {
           index = strstr(input, "XOR");
           if (index != NULL) {
-            &index = '3';
-            &(index + 1) = ' ';
-            &(index + 2) = ' ';
+            *index = '3';
+            *(index + 1) = ' ';
+            *(index + 2) = ' ';
           }
           else {
             condition = false;
@@ -54,15 +54,52 @@ char *replace_o(char *input) {
           }
         }
         case 4: {
+          index = strstr(input, "IMPL");
+          if (index != NULL) {
+            *index = '4';
+            *(index + 1) = ' ';
+            *(index + 2) = ' ';
+            *(index + 3) = ' ';
+          }
+          else {
+            condition = false;
+            break;
+          }
         }
         case 5: {
+          index = strstr(input, "BICOND");
+          if (index != NULL) {
+            *index = '5';
+            *(index + 1) = ' ';
+            *(index + 2) = ' ';
+            *(index + 3) = ' ';
+            *(index + 4) = ' ';
+            *(index + 5) = ' ';
+          }
+          else {
+            condition = false;
+            break;
+          }
         }
         case 6: {
+          index = strstr(input, "NOT");
+          if (index != NULL) {
+            *index = '6';
+            *(index + 1) = ' ';
+            *(index + 2) = ' ';
+          }
+          else {
+            condition = false;
+            break;
+          }
         }
-        case 7: {
-        }
+      }
+    }
+    i++;
+  }
+  return input;
 }
-*/
+
 /*
 proposition generate_tree(char *input, int *str_lvl, int level) {
   proposition prop = {};
@@ -173,10 +210,6 @@ bool solve(proposition *input) {
   return true;
 }
 
-int find_variables(proposition prop) {
-  
-}
-
 int main() {
   proposition capital_a = {END, true, NULL, NULL};
   proposition capital_b = {END, false, NULL, NULL};
@@ -204,21 +237,17 @@ int main() {
 
   proposition final = {IMPL, false, &A_and_B, &not_C};
 
-  char test_string[50] = {"(((A OR B) IMPL (NOT C)) AND D)"};
-  for (int i = 0; i < 31; i++) {
-    printf("%c",test_string[i]);
-  }
-  char test_string2[52] = {""};
+  char test_string[100] = {"(((A OR X OR B) IMPL (NOT C)) AND D) BICOND Z"};
+  printf("%s\n", test_string);
+  char test_string2[102] = {};
   test_string2[0] = '(';
   strcpy(&test_string2[1], test_string);
   test_string2[strlen(test_string2)] = ')';
-  printf("\n");
 //  proposition boo = generate_prop(test_string, strlen(test_string));
-  printf("%d\n", strlen(test_string));
-  for (int i = 0; i < 33; i++) {
-    printf("%c",test_string2[i]);
-  }
-  printf("\n");
+  printf("%s\n", test_string2);
+  printf("replace test\n");
+  char *test_string3 = replace_o(&test_string2);
+  printf("%s\n", test_string3);
 /*
   for (int i = 0; i < 16; i++) {
     printf("A: %d, B: %d, C: %d, D: %d\ ",
