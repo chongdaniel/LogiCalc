@@ -11,6 +11,19 @@
 
 int g_solve_count = 0;
 
+char *fix_parenthesis(char *input) {
+  //fix back parenthesis
+  if (input[strlen(input) - 1] != ')') {
+    input[strlen(input)] = ')';
+  }
+  //fix front parenthesis
+  if (input[0] != '(') {
+    strcpy(&input[1], input);
+    input[0] = '(';
+  }
+  return input;
+}
+
 char *replace_o(char *input) {
   int i = 1;
   while (i < NUM_OPS) {
@@ -100,41 +113,13 @@ char *replace_o(char *input) {
   return input;
 }
 
-/*
-proposition generate_tree(char *input, int *str_lvl, int level) {
-  proposition prop = {};
-  int counter = 0;
-  char new_string[MAX_STRING_LEN] = {'\0'};
 
-  for (int i = 0; i < strlen(input); i++) {
-    if (str_lvl[i] == level) {
-      new_string[i] = input[i];
-    }
-  }
-  // do some string splitting magic
-  for (int i = 0, i < strlen(input); i++) {
-    if (strstr(new_string, "BICOND") != NULL) {
-
-    }
-  }
-
-  // if (no proposition found)
-  //  return prop = {END, FALSE, NULL, NULL};
-  // if (proposition found)
-  //  split input and str_lvl into left_string and right_string by operator
-  //  prop.a = generate_tree(left_string, split_str_lvl, level + 1);
-  //  prop.b = generate_tree(right_string, split_str_lvl, level + 1);
-  //  prop.o = identified_operation;
-  //  prop.value = false;
-  return prop;
-
-}
-*/
-proposition generate_prop(char *input, int input_length) {
-  proposition prop = {END, NULL, NULL, NULL};
+proposition *generate_tree(char *input) {
+  proposition prop = {END, false, NULL, NULL};
+  //find levels
+  int str_lvl[102] = {};
   int level = 0;
-  int str_lvl[50] = {};
-  for (int i = 0; i < input_length; i++) {
+  for (int i = 0; i < strlen(input); i++) {
     if (input[i] == '(') {
       level++;
     }
@@ -143,10 +128,118 @@ proposition generate_prop(char *input, int input_length) {
       level--;
     }
   }
-  for (int i = 0; i < input_length; i++) {
+
+  // do some string splitting magic
+  int lpo = -1; // index of least precedent operator of this level
+  //finds least precedent operator
+  for (int i = 0; i < strlen(input); i++) {
+    if (((input[i] == '1')
+      || (input[i] == '2') || (input[i] == '3') || (input[i] == 4)
+      || (input[i] == '5') || (input[i] == '6'))) {
+      if (lpo == -1) {
+        lpo = i;
+        level = str_lvl[i];
+      }
+      else {
+        if ((str_lvl[i] < level) || 
+          (((int) input[i]) >= ((int) input[lpo]) && (str_lvl[i] == level))) {
+          lpo = i;
+          level = str_lvl;
+        }
+      }
+    }
+  }
+  // no proposition found
+  if (lpo == -1) {
+    return &prop;
+  }
+  else if (input[lpo] == '6') {//NOT operation
+    prop.o = NOT;
+    int end_string = -1;
+    for (int i = (lpo + 4); i < strlen(input); i++) {
+      if (str_lvl[i] < level) {
+        end_string = i;
+        break;
+      }
+    }
+    char new_string[102] = {};
+    strncpy(new_string, &input[lpo + 4], end_string - (lpo + 4));
+    prop.a = generate_tree(fix_parenthesis(new_string));
+    prop.b = prop.a;
+    return &prop;
+  }
+  else {
+    //find start of left string
+    int start_left = -1;
+    for (int i = 0; i < strlen(input); i++) {
+      if (str_lvl[i] == (level + 1)) {
+        start_left = i;
+        break;
+      }
+    }
+    //find end of left string (index of operator - 1)
+    int end_left = lpo - 1;
+    //make left string
+    char left_string[102] = {};
+    strncpy(left_string, &input[start_left], end_left - start_left);
+    //find start of right string
+    int start_right = -1;
+    for (int i = lpo + 1; i < strlen(input); i++) {
+      if (input[i] != ' ') {
+        start_right = i;
+        break;
+      }
+    }
+    //find end of right string
+    int end_right = -1;
+    for (int i = start_right; i < strlen(input); i++) {
+      if (str_lvl[i] < level) {
+        end_right = i;
+      }
+    }
+    if (end_right = -1) {
+      end_right = strlen(input);
+    }
+    //make right string
+    char right_string[102] = {};
+    strncpy(right_string, &input[start_right], end_right - start_right);
+    //determine prop
+    switch (input[lpo]) {
+      case '1':
+        prop.o = AND;
+      case '2':
+        prop.o = OR;
+      case '3':
+        prop.o = XOR;
+      case '4':
+        prop.o = IMPL;
+      case '5':
+        prop.o = BICOND;
+    }
+    prop.a = generate_tree(left_string);
+    prop.b = generate_tree(right_string);
+    return &prop;
+  }
+}
+
+proposition generate_prop(char *input) {
+  proposition prop = {END, NULL, NULL, NULL};
+  int level = 0;
+  int str_lvl[102] = {};
+  for (int i = 0; i < strlen(input); i++) {
+    if (input[i] == '(') {
+      level++;
+    }
+    str_lvl[i] = level;
+    if (input[i] == ')') {
+      level--;
+    }
+  }
+  for (int i = 0; i < strlen(input); i++) {
     printf("%d", str_lvl[i]);
   }
   printf("\n");
+  input = replace_o(input);
 //  generate_tree(input, str_lvl, 1);
   return prop;
 
