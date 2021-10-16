@@ -13,22 +13,24 @@
 #define OUTPUT_ERROR   (-3)
 
 typedef enum {
-  END = 0,
-  AND = 1,
-  OR = 2,
-  XOR = 3,
-  IMPL = 4,
-  BICOND = 5,
-  NOT = 6
+  END = -1,
+  VAR = 0,
+  NOT = 1,
+  AND = 2,
+  OR = 3,
+  XOR = 4,
+  IMPL = 5,
+  BICOND = 6
 } operation;
 
 
 /* Structure declaration */
-typedef struct {
+typedef struct proposition {
   operation o;
   bool value;
   struct proposition *a;
   struct proposition *b;
+  char name[100];
 } proposition;
 
 
