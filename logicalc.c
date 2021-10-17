@@ -9,20 +9,11 @@
 #include <stdbool.h>
 #include <string.h>
 
-int g_solve_count = 0;
-
+int g_variable_count = 0;
+char *g_variable_name[20] = {};
+bool *g_variable_address[20] = {};
 
 char *fix_parenthesis(char *input) {
-  /*
-  //fix back parenthesis
-  if (input[strlen(input) - 1] != ')') {
-    input[strlen(input)] = ')';
-  }
-  //fix front parenthesis
-  if (input[0] != '(') {
-    strcpy(&input[1], input);
-    input[0] = '(';
-  }*/
   int count = 0;
   for (int i = 0; i < strlen(input); i++) {
     if (input[i] == '(') {
@@ -44,6 +35,12 @@ char *fix_parenthesis(char *input) {
         input[strlen(input)] = ')';
       }
     }
+  }
+  //remove excess parenthesis
+  while ((input[0] == '(') && (input[1] == '(')
+    && (input[strlen(input) - 1] == ')') && (input[strlen(input) - 2]) == ')') { 
+    strncpy(input, &input[1], strlen(input) - 1);
+    input[strlen(input) - 2] = '\0';
   }
   return input;
 }
@@ -140,7 +137,7 @@ char *replace_o(char *input) {
 
 proposition generate_tree(char *input) {
   proposition prop = {VAR, false, NULL, NULL, ""};
-  strcpy(&prop.name, input);
+  strcpy(prop.name, input);
   printf("input: %s, in prop: %s\n", input, prop.name);
   //find levels
   int str_lvl[102] = {};
@@ -177,7 +174,12 @@ proposition generate_tree(char *input) {
   }
   // no proposition found
   if (lpo == -1) {
-    printf("no prop\n");
+    printf("no prop, variable name: %s\n", input);
+    g_variable_name[g_variable_count] = prop.name;
+    printf("name in g_array %s, address %p\n",
+      g_variable_name[g_variable_count], &g_variable_name[g_variable_count]);
+    g_variable_address[g_variable_count] = &prop.value;
+    g_variable_count++;
     return prop;
   }
   else if (input[lpo] == '1') {//NOT operation
@@ -371,6 +373,13 @@ int main() {
     printf("%s, length: %ld\n", tree.name, strlen(tree.name));
   }
 
+  //variables found
+  printf("testing variables\n");
+  printf("name 0: %s\n", g_variable_name[0]);
+  for (int i = 0; i < g_variable_count; i++) {
+    printf("variable %d, name %s, value %d, address %p\n",
+      i, g_variable_name[i], *g_variable_address[i], &g_variable_name[i]);
+  }
 /*
   for (int i = 0; i < 16; i++) {
     printf("A: %d, B: %d, C: %d, D: %d\ ",
