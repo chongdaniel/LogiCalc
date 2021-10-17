@@ -15,6 +15,9 @@ bool *g_variable_address[20] = {};
 
 char *fix_parenthesis(char *input) {
   int count = 0;
+  strncpy(&input[1], input, strlen(input));
+  input[0] = '(';
+  input[strlen(input)] = ')';
   for (int i = 0; i < strlen(input); i++) {
     if (input[i] == '(') {
       count++;
@@ -79,7 +82,7 @@ char *replace_o(char *input) {
           }
         }
         case 3: {
-          index = strstr(input, "OR");
+          index = strstr(input, "XOR");
           if (index != NULL) {
             *index = '3';
             *(index + 1) = ' ';
@@ -91,7 +94,7 @@ char *replace_o(char *input) {
           }
         }
         case 4: {
-          index = strstr(input, "XOR");
+          index = strstr(input, "OR");
           if (index != NULL) {
             *index = '4';
             *(index + 1) = ' ';
@@ -285,22 +288,11 @@ bool solve(proposition *input) {
   proposition *left = input->a;
   proposition *right = input->b;
   operation function = input->o;
-//  printf("in function NOTC: %d\n", right->o);
   if ((left->o != VAR) && (left->o != END)) {
-//    printf("left->a: %p\n", left->a);
-//    printf("Pre-Left value: %d\n", left->value);
-//    printf("Pre-Left operator: %d\n", left->o);
-
     left->value = solve(left);
-//    printf("Left value: %d\n", left->value);
   }
   if ((right->o != VAR) && (right->o != END)) {
-//    printf("right->a: %p\n", right->a);
-//    printf("Pre-Right value: %d\n", right->value);
-//    printf("Pre-Right operator: %d\n", right->o);
     right->value = solve(right);
-//    printf("Post-Right operator: %d\n", right->o);
-//    printf("Right value: %d\n", right->value);
   }
   switch (function) {
     case AND:
@@ -348,43 +340,32 @@ int main() {
   proposition rec_testB = {VAR, con_B, NULL, NULL, "rec_testB"};
   proposition rec_testC = {VAR, con_C, NULL, NULL, "rec_testC"};
   proposition rec_testD = {VAR, con_D, NULL, NULL, "rec_testD"};
-
   proposition end = {END, false, NULL, NULL, "end"};
-
-  //statement: (A && B) -> !C
-//  proposition A_and_B = {AND, NULL, &rec_testA, &rec_testB};
-//  proposition A_and_C = {AND, NULL, &rec_testA, &rec_testC};
-//  proposition A_or_B = {OR, NULL, &rec_testA, &rec_testB};
-//  proposition R1 = {AND, NULL, &A_and_B, &A_and_C};
-//  proposition R2 = {AND, NULL, &A_and_C, &A_and_B};
-//  proposition C_and_D = {OR, NULL, &rec_testC, &rec_testD};
-//  proposition not_C_and_D = {NOT, NULL, &C_and_D, &end};
   proposition not_C = {NOT, NULL, &rec_testC, &end, "not_C"};
 
 //  printf("not_test: %d\n", solve(&not_C));
 
-  char test_string[100] = {"(((A OR Y OR G OR H OR F OR J AND K OR K OR 0 IMPL C BICOND B) IMPL (CCCC)) AND D) BICOND Z"};
-//  printf("%s\n", test_string);
+  char test_string[100] = {"(A XOR ((A OR Y OR G OR H OR J IMPL C BICOND B) IMPL (CCCC)) AND D) BICOND Z"};
+
   char test_string2[102] = {};
   test_string2[0] = '(';
   strcpy(&test_string2[1], test_string);
   test_string2[strlen(test_string2)] = ')';
 
-//  printf("%s\n", test_string2);
   printf("replace test\n");
 
   char *test_string3 = replace_o(test_string2);
-//  printf("%s\n", test_string3);
+
   //testing generate tree
   printf("tree test\n");
   proposition tree = generate_tree(test_string3);
-/*
+
   while (tree.o != VAR) {
     tree = *tree.a;
     printf("tree.o: %d\n", tree.o);
     printf("%s, length: %ld\n", tree.name, strlen(tree.name));
   }
-*/
+
   //variables found
   printf("testing variables\n");
   printf("name 0: %s\n", g_variable_name[0]);
@@ -392,20 +373,6 @@ int main() {
     printf("variable %d, name %s, value %d, address %p\n",
       i, g_variable_name[i], *g_variable_address[i], &g_variable_name[i]);
   }
-/*
-  for (int i = 0; i < 16; i++) {
-    printf("A: %d, B: %d, C: %d, D: %d\ ",
-      (&rec_testA)->value, (&rec_testB)->value, (&rec_testC)->value, (&rec_testD)->value);
-    (&rec_testD)->value = !(&rec_testD)->value;
-    if ((i + 1) % 2 == 0) {
-      (&rec_testC)->value = !(&rec_testC)->value;
-    }
-    if ((i + 1) % 4 == 0) {
-      (&rec_testB)->value = !(&rec_testB)->value;
-    }
-    if ((i + 1) % 8 == 0) {
-      (&rec_testA)->value = !(&rec_testA)->value;
-    }
-*/
+
   return OK;
 }

@@ -23,8 +23,8 @@ typedef enum {
   VAR = 0,
   NOT = 1,
   AND = 2,
-  OR = 3,
-  XOR = 4,
+  XOR = 3,
+  OR = 4,
   IMPL = 5,
   BICOND = 6
 } operation;
