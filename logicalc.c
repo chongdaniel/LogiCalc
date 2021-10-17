@@ -58,6 +58,7 @@ char *replace_o(char *input) {
             *index = '1';
             *(index + 1) = ' ';
             *(index + 2) = ' ';
+            break;
           }
           else {
             condition = false;
@@ -70,6 +71,7 @@ char *replace_o(char *input) {
             *index = '2';
             *(index + 1) = ' ';
             *(index + 2) = ' ';
+            break;
           }
           else {
             condition = false;
@@ -81,6 +83,7 @@ char *replace_o(char *input) {
           if (index != NULL) {
             *index = '3';
             *(index + 1) = ' ';
+            break;
           }
           else {
             condition = false;
@@ -93,6 +96,7 @@ char *replace_o(char *input) {
             *index = '4';
             *(index + 1) = ' ';
             *(index + 2) = ' ';
+            break;
           }
           else {
             condition = false;
@@ -106,6 +110,7 @@ char *replace_o(char *input) {
             *(index + 1) = ' ';
             *(index + 2) = ' ';
             *(index + 3) = ' ';
+            break;
           }
           else {
             condition = false;
@@ -121,6 +126,7 @@ char *replace_o(char *input) {
             *(index + 3) = ' ';
             *(index + 4) = ' ';
             *(index + 5) = ' ';
+            break;
           }
           else {
             condition = false;
@@ -136,6 +142,11 @@ char *replace_o(char *input) {
 
 
 proposition generate_tree(char *input) {
+  printf("variables found: ");
+  for (int i = 0; i < g_variable_count; i++) {
+    printf("%s ", g_variable_name[i]);
+  }
+  printf("\n");
   proposition prop = {VAR, false, NULL, NULL, ""};
   strcpy(prop.name, input);
   printf("input: %s, in prop: %s\n", input, prop.name);
@@ -179,6 +190,7 @@ proposition generate_tree(char *input) {
     printf("name in g_array %s, address %p\n",
       g_variable_name[g_variable_count], &g_variable_name[g_variable_count]);
     g_variable_address[g_variable_count] = &prop.value;
+    printf("g_variable_count: %d\n", g_variable_count);
     g_variable_count++;
     return prop;
   }
@@ -228,7 +240,7 @@ proposition generate_tree(char *input) {
         end_right = i;
       }
     }
-    if (end_right = -1) {
+    if (end_right == -1) {
       end_right = strlen(input);
     }
     //make right string
@@ -256,7 +268,7 @@ proposition generate_tree(char *input) {
       default:
         printf("something went terribly wrong\n");
     }
-    printf("prop.o :%d\n", prop.o);
+    printf("prop.o: %d\n", prop.o);
     printf("left_string before fix: %s\n", left_string);
     printf("left_string after fix: %s\n", fix_parenthesis(left_string));
     printf("right_string before fix: %s\n", right_string);
@@ -349,30 +361,30 @@ int main() {
 //  proposition not_C_and_D = {NOT, NULL, &C_and_D, &end};
   proposition not_C = {NOT, NULL, &rec_testC, &end, "not_C"};
 
-  printf("not_test: %d\n", solve(&not_C));
+//  printf("not_test: %d\n", solve(&not_C));
 
-  char test_string[100] = {"(((A OR X OR B) IMPL (C)) AND D) BICOND Z"};
-  printf("%s\n", test_string);
+  char test_string[100] = {"(((A OR Y OR G OR H OR F OR J AND K OR K OR 0 IMPL C BICOND B) IMPL (CCCC)) AND D) BICOND Z"};
+//  printf("%s\n", test_string);
   char test_string2[102] = {};
   test_string2[0] = '(';
   strcpy(&test_string2[1], test_string);
   test_string2[strlen(test_string2)] = ')';
 
-  printf("%s\n", test_string2);
+//  printf("%s\n", test_string2);
   printf("replace test\n");
 
   char *test_string3 = replace_o(test_string2);
-  printf("%s\n", test_string3);
+//  printf("%s\n", test_string3);
   //testing generate tree
   printf("tree test\n");
   proposition tree = generate_tree(test_string3);
-
+/*
   while (tree.o != VAR) {
     tree = *tree.a;
     printf("tree.o: %d\n", tree.o);
     printf("%s, length: %ld\n", tree.name, strlen(tree.name));
   }
-
+*/
   //variables found
   printf("testing variables\n");
   printf("name 0: %s\n", g_variable_name[0]);

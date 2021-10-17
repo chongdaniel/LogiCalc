@@ -3,6 +3,12 @@
 
 #include <stdbool.h>
 
+/* Global variables */
+
+extern int g_variable_count;
+extern char *g_variable_names[20];
+extern bool *g_variable_address[20];
+
 /* Constant definitions */
 #define MAX_STRING_LEN (50)
 #define NUM_OPS        (7)
