@@ -36,13 +36,13 @@ typedef struct proposition {
   bool value;
   struct proposition *a;
   struct proposition *b;
-  char name[100];
+  char *name;
 } proposition;
 
 
 /* prototype */
 
-bool solve(proposition *);
+void solve(proposition *);
 
 
 
