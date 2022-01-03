@@ -201,7 +201,7 @@ proposition *generate_tree(char *input) {
 
   // do some string splitting magic
   int lpo = -1; // index of least precedent operator of this level
-  //finds least precedent operator
+  // finds least precedent operator
   for (int i = 0; i < strlen(input); i++) {
     if (((input[i] == '1')
       || (input[i] == '2') || (input[i] == '3') || (input[i] == '4')
@@ -529,36 +529,39 @@ void alternate_var_values(int var_index) {//at first i is 0
 int main() {
   //testing for nested struct to see if recursion works
 //  printf("testing recursion\n");
-  bool con_A = true;
-  bool con_B = true;
-  bool con_C = true;
-  bool con_D = true;
-  proposition rec_testA = {VAR, con_A, NULL, NULL, "rec_testA"};
-  proposition rec_testB = {VAR, con_B, NULL, NULL, "rec_testB"};
-  proposition rec_testC = {VAR, con_C, NULL, NULL, "rec_testC"};
-  proposition rec_testD = {VAR, con_D, NULL, NULL, "rec_testD"};
-  proposition end = {END, false, NULL, NULL, "end"};
-  proposition not_C = {NOT, NULL, &rec_testC, &end, "not_C"};
+//  bool con_A = true;
+//  bool con_B = true;
+//  bool con_C = true;
+//  bool con_D = true;
+//  proposition rec_testA = {VAR, con_A, NULL, NULL, "rec_testA"};
+//  proposition rec_testB = {VAR, con_B, NULL, NULL, "rec_testB"};
+//  proposition rec_testC = {VAR, con_C, NULL, NULL, "rec_testC"};
+//  proposition rec_testD = {VAR, con_D, NULL, NULL, "rec_testD"};
+//  proposition end = {END, false, NULL, NULL, "end"};
+//  proposition not_C = {NOT, NULL, &rec_testC, &end, "not_C"};
 
 //  printf("not_test: %d\n", solve(&not_C));
 
   // "(((A OR Y OR F AND G BICOND H IMPL B) IMPL (CCCC)) AND D) BICOND Z"
   // "((A OR B) AND C) IMPL D"
-  char test_string[100] = {"(A AND B) OR C"};
-  printf("%s\n", test_string);
-
-  char test_string2[102] = {};
-  test_string2[0] = '(';
-  strcpy(&test_string2[1], test_string);
-  test_string2[strlen(test_string2)] = ')';
+  char test_string[100] = {"(A AND B) OR C IMPL D"};
+//  printf("%s\n", test_string);
+  char input_string[100] = {};
+//  scanf("%[^\n]", input_string);
+//  printf("%s\n", input_string);
+//  char test_string2[102] = {};
+//  test_string2[0] = '(';
+//  strcpy(&test_string2[1], test_string);
+//  test_string2[strlen(test_string2)] = ')';
 
   //replace test
 
-  char *test_string3 = replace_o(test_string2);
+//  char *test_string3 = replace_o(test_string2);
 
   //testing generate tree
 //  printf("tree test\n");
-  tree = generate_tree(test_string3);
+
+  tree = generate_tree(replace_o(test_string));
 
   //print out left most variables
 //  printf("print out left most side of tree\n");
@@ -586,7 +589,10 @@ int main() {
   printf("g_variable_count = %d\n", g_variable_count);
 //  printf("tree initial value %d\n", tree->value);
 //  printf("A B C D E ");
-  printf("A B C ");
+//  printf("A B C ");
+  for (int i = 0; i < g_variable_count; i++) {
+    printf("%c ", g_variable_name[i][1]);
+  }
   print_tree(tree, 1);
   printf("\n");
   /*
